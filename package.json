@@ -1,0 +1,41 @@
+{
+	"name": "moff-cli",
+	"version": "0.1.0",
+	"description": "The Moff.js command line utility",
+	"scripts": {
+		"test": "node tests/run"
+	},
+	"bin": {
+		"moff": "./bin/moff"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kfuzaylov/moff-cli.git"
+	},
+	"keywords": [
+		"moff",
+		"cli",
+		"mobile",
+		"first",
+		"framework",
+		"moff.js"
+	],
+	"author": "Kadir Fuzaylov",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/kfuzaylov/moff-cli/issues"
+	},
+	"homepage": "http://moffjs.com/moff-cli/index.html",
+	"dependencies": {
+		"cheerio": "^0.22.0",
+		"clean-css": "^3.4.20",
+		"colors": "^1.1.2",
+		"concatenate-files": "^0.1.1",
+		"critical": "^0.8.0",
+		"html-minifier": "^3.1.0",
+		"md5-file": "^3.1.1",
+		"mkdirp": "^0.5.1",
+		"pretty-error": "^2.0.1",
+		"uglify-js2": "^2.1.11"
+	}
+}
