@@ -6,7 +6,7 @@
 		"test": "node tests/run"
 	},
 	"bin": {
-		"moff": "./bin/moff"
+		"moff": "./bin/moff.js"
 	},
 	"repository": {
 		"type": "git",
