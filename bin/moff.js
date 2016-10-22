@@ -63,16 +63,16 @@ $('script').each(function() {
 		sources.origin.push(src);
 
 		if (/^\//.test(src)) {
-			src = '.' + src;
+			sources.normalized.push(path.join(process.cwd(), src));
+		} else {
+			sources.normalized.push(path.join(process.cwd(), path.dirname(source), src));
 		}
-
-		sources.normalized.push(src);
 	}
 });
 
 fs.writeFile(jsDest, UglifyJS.minify(sources.normalized).code, {mode: 0777}, function() {
 	md5File(jsDest, function(error, hash) {
-		var newPath = assets + '/' + hash + '.js';
+		var newPath = '/' + assets + '/' + hash + '.js';
 
 		$('script[src="' + sources.origin[0] + '"]').before('<script src="' + newPath + '">');
 
@@ -91,10 +91,10 @@ $('link[rel="stylesheet"]').each(function() {
 		links.origin.push(href);
 
 		if (/^\//.test(href)) {
-			href = '.' + href;
+			links.normalized.push(path.join(process.cwd(), href));
+		} else {
+			links.normalized.push(path.join(process.cwd(), path.dirname(source), href));
 		}
-
-		links.normalized.push(href);
 	}
 });
 
@@ -108,7 +108,7 @@ concat(links.normalized, cssDest, function(error, result) {
 
 	fs.writeFile(cssDest, minified, {mode: 0777}, function() {
 		md5File(cssDest, function(error, hash) {
-			newPath = assets + '/' + hash + '.css';
+			newPath = '/' + assets + '/' + hash + '.css';
 
 			$('link[href="' + links.origin[0] + '"]').before('<link rel="stylesheet" href="' + newPath + '">');
 
