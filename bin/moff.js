@@ -120,7 +120,8 @@ concat(links.normalized, cssDest, function(error, result) {
 				criticalCss.generate(output, minify($.html(), {
 					collapseWhitespace: true,
 					maxLineLength: 200,
-					minifyJS: true
+					minifyCSS: true,
+					minifyJS: true,
 				}), args);
 			});
 		});
