@@ -8,12 +8,10 @@ Usage
 
     > npm install -g moff-cli
 
-</p>
 ### Optimize your page
 
     > moff api/index.src.html api/index.html
 
-</p>
 Run this command to optimize your page. You have to run it from the root of your project, because Moff CLI creates `moff-assets` folder in working directory and puts all generated assets into it.
 
 Note: If you do not specify optimized file name then it will be generated as input file name with `moff-` prefix.
