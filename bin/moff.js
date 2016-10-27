@@ -4,7 +4,6 @@ var path = require('path');
 var fs = require('fs');
 var criticalCss = require('../lib/critical-css');
 var colors = require('colors');
-var PrettyError = require('pretty-error');
 var mkdirp = require('mkdirp');
 var concat = require('concatenate-files');
 var CleanCSS = require('clean-css');
@@ -14,7 +13,6 @@ var minify = require('html-minifier').minify;
 var UglifyJS = require("uglify-js2");
 var assets = 'moff-assets';
 var args = process.argv.slice(2);
-var pe = new PrettyError();
 var links = {
 	normalized: [],
 	origin: []
@@ -42,8 +40,8 @@ if (!args[1]) {
 	output = path.format(sourcePath);
 }
 
-jsDest = assets + '/' + path.basename(output) + '.js';
-cssDest = assets + '/' + path.basename(output) + '.css';
+jsDest = path.join(process.cwd(), assets, path.basename(output) + '.js');
+cssDest = path.join(process.cwd(),  assets, path.basename(output) + '.css');
 $ = cheerio.load(fs.readFileSync(source));
 
 try {
@@ -80,7 +78,7 @@ fs.writeFile(jsDest, UglifyJS.minify(sources.normalized).code, {mode: 0777}, fun
 			$('script[src="' + sources.origin[i] + '"]').remove();
 		}
 
-		fs.rename(jsDest, newPath, function() {});
+		fs.rename(jsDest, path.join(process.cwd(), newPath), function() {});
 	});
 });
 
@@ -100,7 +98,7 @@ $('link[rel="stylesheet"]').each(function() {
 
 concat(links.normalized, cssDest, function(error, result) {
 	if (error) {
-		console.log(pe.render(error));
+		console.log(error);
 	}
 
 	var minified = new CleanCSS().minify(result.outputData).styles;
@@ -116,12 +114,15 @@ concat(links.normalized, cssDest, function(error, result) {
 				$('link[href="' + links.origin[i] + '"]').remove();
 			}
 
-			fs.rename(cssDest, newPath, function() {
+			fs.rename(cssDest, path.join(process.cwd(), newPath), function(error) {
+				if (error) {
+					console.log(error);
+				}
+
 				criticalCss.generate(output, minify($.html(), {
 					collapseWhitespace: true,
 					maxLineLength: 200,
-					minifyCSS: true,
-					minifyJS: true,
+					minifyJS: true
 				}), args);
 			});
 		});
