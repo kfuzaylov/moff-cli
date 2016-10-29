@@ -26,7 +26,7 @@ Note: If you do not specify optimized file name then it will be generated as inp
 Options
 -------
 
-| Name | Default value | Description                                     |
+| Name | Default | Description                                           |
 |------|---------------|-------------------------------------------------|
 | -w   | 1170          | Width of view port for critical css generation  |
 | -h   | 1000          | Height of view port for critical css generation |
