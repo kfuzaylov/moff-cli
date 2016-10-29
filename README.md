@@ -1,6 +1,13 @@
 # Moff CLI - The Moff.js command line utility.
 Home page: [http://moffjs.com/moff-cli/index.html](http://moffjs.com/moff-cli/index.html "Moff CLI - The Moff.js command line utility")
 
+Overview
+-------
+
+Moff CLI optimizes you page by minification and concatenation of resources.
+Generated resources named by <abbr title="The MD5 algorithm is a widely used hash function producing a 128-bit hash value.">MD5</abbr> hash which provides best practices to set set maximum expiry date and update by changing file name.
+Also it puts critical path CSS and asynchronously loads CSS files. And as a last step it minifies HTML and inlined JS and CSS.
+
 Usage
 -----
 
@@ -30,9 +37,10 @@ What does Moff CLI optimize?
 
 ### Concatenate, minify CSS and generates critical path CSS
 
-All your CSS files will be concatenated and minified into one file to reduce <abbr title="The Hypertext Transfer Protocol">HTTP</abbr> requests to server. Only external css files stays as is, because usually this is <abbr title="Content Delivery Network">CDN</abbr> files which are already cached.
+All your CSS files will be concatenated and minified into one file to reduce <abbr title="The Hypertext Transfer Protocol">HTTP</abbr> requests to server.
+Only external (when href starts from `http(s)` or `//`) css files are not processed by CLI, because usually this is <abbr title="Content Delivery Network">CDN</abbr> files which are already cached.
 
-Concatenated files named by <abbr title="The MD5 algorithm is a widely used hash function producing a 128-bit hash value.">MD5</abbr> hash of file content. It allows to set maximum expiry date in the HTTP headers and update resources by changed hash in file name.
+Concatenated files named by MD5 hash of file content. It allows to set maximum expiry date in the HTTP headers and update resources by changed hash in file name.
 
 After CSS files concatenation it generates critical path CSS. It will decrease the time to display content to the screen and additional network latency. Modern browsers block painting content to the screen before loading external CSS. Inlining CSS of view port optimizes time to render.
 
@@ -64,13 +72,17 @@ After CSS files concatenation it generates critical path CSS. It will decrease t
 
 ### Concatenate and minify JavaScript
 
-JavaScript files concatenated and minified the same way as CSS files. All files are concatenated and minified except of external ones. Generated files are stored in `moff-assets` folder and renamed by MD5 hash.
+JavaScript files concatenated and minified the same way as CSS files. All files are concatenated and minified except of asynchronous and external ones.
+ If script source starts from `http(s)`, `//` or has `async` attribute it will not be precessed by Moff CLI.
+Generated files are stored in `moff-assets` folder and renamed by MD5 hash.
 
     <!-- Before -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="/scripts/functions.js"></script>
     <script src="/scripts/registration.js"></script>
 
     <!-- After -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="/moff-assets/s2g886eee74dac056o32c53c60784az2.js"></script>
 
 </p>
