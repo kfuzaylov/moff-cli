@@ -54,7 +54,7 @@ $('script').each(function() {
 	var script = $(this);
 	var src = script.attr('src');
 
-	if (!src || !script.attr('async')) {
+	if (!src || script.attr('async')) {
 		return;
 	}
 
