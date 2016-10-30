@@ -2,17 +2,15 @@
 
 var path = require('path');
 var fs = require('fs');
-var criticalCss = require('../lib/critical-css');
+var processLinks = require('../lib/process-links');
 var mkdirp = require('mkdirp');
-var concat = require('concatenate-files');
-var CleanCSS = require('clean-css');
 var cheerio = require('cheerio');
-var md5File = require('md5-file');
 var minify = require('html-minifier').minify;
+var md5File = require('md5-file');
 var UglifyJS = require("uglify-js");
-var assets = 'moff-assets';
 var args = process.argv.slice(2);
 var packageConfig = require('../package.json');
+var assets = 'moff-assets';
 var links = {
 	normalized: [],
 	origin: []
@@ -21,7 +19,7 @@ var sources = {
 	normalized: [],
 	origin: []
 };
-var $, source, output, jsDest, cssDest;
+var $, source, output, jsDest, cssDest, html;
 
 process.title = 'moff';
 
@@ -74,20 +72,6 @@ $('script').each(function() {
 	}
 });
 
-fs.writeFile(jsDest, UglifyJS.minify(sources.normalized).code, {mode: 0777}, function() {
-	md5File(jsDest, function(error, hash) {
-		var newPath = '/' + assets + '/' + hash + '.js';
-
-		$('script[src="' + sources.origin[0] + '"]').before('<script src="' + newPath + '">');
-
-		for (var i = 0, length = sources.origin.length; i < length; i++) {
-			$('script[src="' + sources.origin[i] + '"]').remove();
-		}
-
-		fs.rename(jsDest, path.join(process.cwd(), newPath), function() {});
-	});
-});
-
 $('link[rel="stylesheet"]').each(function() {
 	var href = $(this).attr('href');
 
@@ -102,36 +86,35 @@ $('link[rel="stylesheet"]').each(function() {
 	}
 });
 
-concat(links.normalized, cssDest, function(error, result) {
-	if (error) {
-		console.log(error);
-	}
+if (sources.normalized.length) {
+	fs.writeFileSync(jsDest, UglifyJS.minify(sources.normalized).code, {mode: 0777});
+	md5File(jsDest, function(error, hash) {
+		var newPath = '/' + assets + '/' + hash + '.js';
 
-	var minified = new CleanCSS().minify(result.outputData).styles;
-	var newPath;
+		$('script[src="' + sources.origin[0] + '"]').before('<script src="' + newPath + '">');
 
-	fs.writeFile(cssDest, minified, {mode: 0777}, function() {
-		md5File(cssDest, function(error, hash) {
-			newPath = '/' + assets + '/' + hash + '.css';
+		for (var i = 0, length = sources.origin.length; i < length; i++) {
+			$('script[src="' + sources.origin[i] + '"]').remove();
+		}
 
-			$('link[href="' + links.origin[0] + '"]').before('<link rel="stylesheet" href="' + newPath + '">');
-
-			for (var i = 0, length = links.origin.length; i < length; i++) {
-				$('link[href="' + links.origin[i] + '"]').remove();
-			}
-
-			fs.rename(cssDest, path.join(process.cwd(), newPath), function(error) {
-				if (error) {
-					console.log(error);
-				}
-
-				criticalCss.generate(output, minify($.html(), {
-					collapseWhitespace: true,
-					maxLineLength: 200,
-					minifyCSS: true,
-					minifyJS: true
-				}), args);
-			});
+		fs.rename(jsDest, path.join(process.cwd(), newPath), function() {
+			processLinks(links, $, cssDest, output, args);
 		});
 	});
-});
+}
+
+if (!sources.normalized.length && links.normalized.length) {
+	processLinks(links, $, cssDest, output, args);
+}
+
+if (!sources.normalized.length && !links.normalized.length) {
+	html = minify($.html(), {
+		collapseWhitespace: true,
+		maxLineLength: 200,
+		minifyCSS: true,
+		minifyJS: true
+	});
+
+	fs.writeFileSync(output, html, {mode: 0777});
+	console.log('Page successfully generated!');
+}
