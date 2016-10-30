@@ -165,6 +165,7 @@ Options
 Optimize page with specific width and height for critical path css
 
     > moff api/index.src.html api/index.html -w 320 -h 760
+    Page successfully generated!
 
 Print Moff CLI version
 
