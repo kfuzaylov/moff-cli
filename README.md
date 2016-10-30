@@ -4,9 +4,9 @@ Home page: [http://moffjs.com/moff-cli/index.html](http://moffjs.com/moff-cli/in
 Overview
 -------
 
-Moff CLI optimizes you page by minification and concatenation of resources.
-Generated resources named by <abbr title="The MD5 algorithm is a widely used hash function producing a 128-bit hash value.">MD5</abbr> hash which provides best practices to set set maximum expiry date and update by changing file name.
-Also it puts critical path CSS and asynchronously loads CSS files. And as a last step it minifies HTML and inlined JS and CSS.
+Moff CLI optimizes you page by one command. It will generate fully optimized page from your source page.
+Generated pages are become lighter and faster and available for viewing on slow connection. It will apply all possible techniques to optimize page, starting from
+concatenation, minification and finishing by generation critical css path. Below you can see what exactly do Moff CLI to optimize your page.
 
 Usage
 -----
@@ -22,15 +22,6 @@ Usage
 Run this command to optimize your page. You have to run it from the root of your project, because Moff CLI creates `moff-assets` folder in working directory and puts all generated assets into it.
 
 Note: If you do not specify optimized file name then it will be generated as input file name with `moff-` prefix.
-
-Options
--------
-
-| Name | Default | Description                                           |
-|------|---------------|-------------------------------------------------|
-| -w   | 1170          | Width of view port for critical css generation  |
-| -h   | 1000          | Height of view port for critical css generation |
-
 
 What does Moff CLI optimize?
 ----------------------------
@@ -165,3 +156,23 @@ Moff CLI minifies HTML of and inlined JavaScript to reduce the size of the page.
     <script>
     Moff.amd.register({id:"social",depend:{js:["https://buttons.github.io/buttons.js","https://apis.google.com/js/platform.js"]},afterInclude:function(){!function(t,e,s){var n,o=t.getElementsByTagName(e)[0],r=/^http:/.test(t.location)?"http":"https";t.getElementById(s)||(n=t.createElement(e),n.id=s,n.src=r+"://platform.twitter.com/widgets.js",o.parentNode.insertBefore(n,o))}(document,"script","twitter-wjs")}});
     </script>
+
+Options
+-------
+
+### Examples
+
+Optimize page with specific width and height for critical path css
+
+    > moff api/index.src.html api/index.html -w 320 -h 760
+
+Print Moff CLI version
+
+    > moff -v
+    v0.2.0
+
+| Name | Default | Description                                           |
+|------|---------------|-------------------------------------------------|
+| -w   | 1170          | Width of view port for critical css generation  |
+| -h   | 1000          | Height of view port for critical css generation |
+| -v   |               | Current Moff CLI version                        |

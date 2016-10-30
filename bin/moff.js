@@ -3,7 +3,6 @@
 var path = require('path');
 var fs = require('fs');
 var criticalCss = require('../lib/critical-css');
-var colors = require('colors');
 var mkdirp = require('mkdirp');
 var concat = require('concatenate-files');
 var CleanCSS = require('clean-css');
@@ -13,6 +12,7 @@ var minify = require('html-minifier').minify;
 var UglifyJS = require("uglify-js");
 var assets = 'moff-assets';
 var args = process.argv.slice(2);
+var packageConfig = require('../package.json');
 var links = {
 	normalized: [],
 	origin: []
@@ -26,7 +26,12 @@ var $, source, output, jsDest, cssDest;
 process.title = 'moff';
 
 if (!args[0]) {
-	console.log('Source file is not provides.\nExample:\n$ moff source.html output.html'.red);
+	console.log('Command is not provided.\nExample:\n$ moff source.html output.html');
+	return;
+}
+
+if (args[0] === '-v') {
+	console.log('v' + packageConfig.version);
 	return;
 }
 
@@ -123,6 +128,7 @@ concat(links.normalized, cssDest, function(error, result) {
 				criticalCss.generate(output, minify($.html(), {
 					collapseWhitespace: true,
 					maxLineLength: 200,
+					minifyCSS: true,
 					minifyJS: true
 				}), args);
 			});
