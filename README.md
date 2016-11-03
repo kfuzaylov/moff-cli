@@ -76,7 +76,7 @@ Generated files are stored in `moff-assets` folder and renamed by MD5 hash.
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="/moff-assets/s2g886eee74dac056o32c53c60784az2.js"></script>
 
-</p>
+
 ### Minify HTML and inlined JavaScript, CSS
 
 Moff CLI minifies HTML of and inlined JavaScript to reduce the size of the page.
