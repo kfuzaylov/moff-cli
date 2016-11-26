@@ -1,6 +1,6 @@
 {
 	"name": "moff-cli",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "The Moff.js command line utility",
 	"scripts": {
 		"test": "node tests/run"

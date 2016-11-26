@@ -11,6 +11,7 @@ var UglifyJS = require("uglify-js");
 var args = process.argv.slice(2);
 var packageConfig = require('../package.json');
 var assets = 'moff-assets';
+var minifyHtml = false;
 var links = {
 	normalized: [],
 	origin: []
@@ -41,6 +42,10 @@ if (!args[1]) {
 
 	sourcePath.base = 'moff-' + sourcePath.base;
 	output = path.format(sourcePath);
+}
+
+if (args.indexOf('--minify-html') !== -1) {
+	minifyHtml = true;
 }
 
 jsDest = path.join(process.cwd(), assets, path.basename(output) + '.js');
@@ -108,12 +113,16 @@ if (!sources.normalized.length && links.normalized.length) {
 }
 
 if (!sources.normalized.length && !links.normalized.length) {
-	html = minify($.html(), {
-		collapseWhitespace: true,
-		maxLineLength: 200,
-		minifyCSS: true,
-		minifyJS: true
-	});
+	html = $.html();
+
+	if (minifyHtml) {
+		html = minify(html, {
+			collapseWhitespace: true,
+			maxLineLength: 200,
+			minifyCSS: true,
+			minifyJS: true
+		});
+	}
 
 	fs.writeFileSync(output, html, {mode: 0777});
 	console.log('Page successfully generated!');

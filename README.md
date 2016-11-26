@@ -59,7 +59,7 @@ After CSS files concatenation it generates critical path CSS. It will decrease t
         <link href="/moff-assets/b288868ee7bdac056132c59c60959af3.css" rel="preload" as="style" onload="this.rel='stylesheet'">
         <noscript><link href="/moff-assets/b288868ee7bdac056132c59c60959af3.css" rel="stylesheet"></noscript>
         <script>!function(e){"use strict";var t=function(t,n,r){function o(e){return i.body?e():void setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n&lt;t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
-    </head&>
+    </head>
 
 ### Concatenate and minify JavaScript
 
@@ -165,15 +165,14 @@ Options
 Optimize page with specific width and height for critical path css
 
     > moff api/index.src.html api/index.html -w 320 -h 760
-    Page successfully generated!
 
 Print Moff CLI version
 
     > moff -v
-    v0.2.0
 
-| Name | Default | Description                                           |
-|------|---------------|-------------------------------------------------|
-| -w   | 1170          | Width of view port for critical css generation  |
-| -h   | 1000          | Height of view port for critical css generation |
-| -v   |               | Current Moff CLI version                        |
+| Name            | Default       | Description                                                     |
+|-----------------|---------------|-------------------------------------------------|
+| -w              | 1170          | Width of view port for critical css generation  |
+| -h              | 1000          | Height of view port for critical css generation |
+| -v              |               | Current Moff CLI version                        |
+| --minify-html   |               | Minifies HTML, inlined CSS and JavaScript       |
